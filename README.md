@@ -1,2 +1,2 @@
-# Snaspter-server
-Server for Snaspter
+# Snapster-server
+Server for Snapster
