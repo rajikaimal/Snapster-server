@@ -1,6 +1,6 @@
 var express = require('express');
 var app = express();
-var port = 3000;
+var port = process.env.PORT || 80;
 
 app.get('/', function(req,res) {
 	console.log('log ...');
