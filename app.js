@@ -3,6 +3,7 @@ var app = express();
 var port = 3000;
 
 app.get('/', function(req,res) {
+	console.log('log ...');
 	res.send('sample route');
 });
 
