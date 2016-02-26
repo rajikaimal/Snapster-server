@@ -1,0 +1,27 @@
+{
+  "name": "snapster",
+  "version": "0.0.1",
+  "description": "REST api for snapster mobile application",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rajikaimal/Snapster-server.git"
+  },
+  "keywords": [
+    "rest",
+    "api",
+    "express"
+  ],
+  "author": "Rajika Imal",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rajikaimal/Snapster-server/issues"
+  },
+  "homepage": "https://github.com/rajikaimal/Snapster-server#readme",
+  "dependencies": {
+    "express": "^4.13.4"
+  }
+}
