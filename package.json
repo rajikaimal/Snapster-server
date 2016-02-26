@@ -4,6 +4,7 @@
   "description": "REST api for snapster mobile application",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "test": "mocha"
   },
   "repository": {
