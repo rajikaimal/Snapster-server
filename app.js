@@ -42,6 +42,7 @@ app.post('/api/post', function(req, res) {
   config.push(post);
 
   var configJSON = JSON.stringify(config);
+  res.json(configJSON);
 });
 
 app.listen(port, function() {
