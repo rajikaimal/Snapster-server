@@ -16,14 +16,14 @@ app.get('/snap', function(req, res) {
 });
 
 app.get('/posts', function(req, res) {
-  jsonfile.readFile(file, function(err, obj) {
-    if (err) throw err;
-    var names = obj.posts.map(function(item) {
-      return item;
-    });
+  // jsonfile.readFile(file, function(err, obj) {
+  //   if (err) throw err;
+  //   var names = obj.posts.map(function(item) {
+  //     return item;
+  //   });
 
-    res.json(names);
-  });
+  //   res.json(names);
+  // });
 });
 
 app.post('/api/post', function(req, res) {
@@ -42,16 +42,6 @@ app.post('/api/post', function(req, res) {
   config.push(post);
 
   var configJSON = JSON.stringify(config);
-
-  fs.writeFileSync('./snaps.json', configJSON);
-  jsonfile.readFile(file, function(err, obj) {
-    if (err) throw err;
-    var names = obj.posts.map(function(item) {
-      return item;
-    });
-
-    res.json(names);
-  });
 });
 
 app.listen(port, function() {
