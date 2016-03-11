@@ -2,17 +2,18 @@ var express = require('express');
 var app = express();
 var jsonfile = require('jsonfile');
 var appendjson = require('appendjson');
-var file = './snaps.json';
-var port = process.env.PORT || 80;
+var port = process.env.PORT || 3000;
 var fs = require('fs');
+var bodyParser = require('body-parser');
+var file = './snaps.json';
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true,
+}));
 
 app.get('/', function(req, res) {
-  console.log('log ...');
-  res.send('sample route');
-});
-
-app.get('/snap', function(req, res) {
-  res.send('Got it !');
+  res.json({env: 'testing'});
 });
 
 app.get('/posts', function(req, res) {
@@ -27,14 +28,14 @@ app.get('/posts', function(req, res) {
 });
 
 app.post('/api/post', function(req, res) {
+  var username = req.body.username;
+  var time = new Date();
+  var image = req.body.image;
+  console.log(username);
   var post = {
-    name: 'Kendall Jenner',
-    datetime: '2016-03-19 08-08',
-    image: 'imagepath',
-    comments: {
-      username: 'rajika',
-      comment: 'sample comment',
-    },
+    name: username,
+    datetime: time,
+    image: image,
   };
   var posts = fs.readFileSync('./snaps.json');
   var config = JSON.parse(posts);
@@ -42,7 +43,30 @@ app.post('/api/post', function(req, res) {
   config.push(post);
 
   var configJSON = JSON.stringify(config);
-  res.json(configJSON);
+
+  fs.writeFileSync('./snaps.json', configJSON);
+  jsonfile.readFile(file, function(err, obj) {
+    if (err) throw err;
+    var names = obj.map(function(item) {
+      return item;
+    });
+
+    res.json(names);
+  });
+});
+
+app.get('/api/post/:id', function(req, res) {
+  var id = req.params.id;
+  var posts = fs.readFileSync('./snaps.json');
+  var config = JSON.parse(posts);
+
+  config.map(function(post) {
+    if (post.name == id) {
+      res.json(post);
+    }
+  });
+
+  //search query
 });
 
 app.listen(port, function() {
