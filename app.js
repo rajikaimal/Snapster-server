@@ -44,6 +44,14 @@ app.post('/api/post', function(req, res) {
   var configJSON = JSON.stringify(config);
 
   fs.writeFileSync('./snaps.json', configJSON);
+  jsonfile.readFile(file, function(err, obj) {
+    if (err) throw err;
+    var names = obj.posts.map(function(item) {
+      return item;
+    });
+
+    res.json(names);
+  });
 });
 
 app.listen(port, function() {
