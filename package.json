@@ -23,6 +23,8 @@
   },
   "homepage": "https://github.com/rajikaimal/Snapster-server#readme",
   "dependencies": {
-    "express": "^4.13.4"
+    "appendjson": "^0.1.2",
+    "express": "^4.13.4",
+    "jsonfile": "^2.2.3"
   }
 }
