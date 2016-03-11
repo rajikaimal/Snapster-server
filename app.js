@@ -3,7 +3,7 @@ var app = express();
 var jsonfile = require('jsonfile');
 var appendjson = require('appendjson');
 var file = './snaps.json';
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 80;
 var fs = require('fs');
 
 app.get('/', function(req, res) {
