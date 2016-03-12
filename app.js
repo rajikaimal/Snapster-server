@@ -61,12 +61,12 @@ app.get('/api/post/funnyfeed/:id', function(req, res) {
 
 });
 
-app.post('/api/feed/funny', function(req, res) {
-
-});
-
 app.get('/api/feed/funny', function(req, res) {
-  res.json();
+  Post.find(function(err, posts) {
+    if (err) console.log(err);
+
+    res.json(posts);
+  });
 });
 
 app.listen(port, function() {
