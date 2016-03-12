@@ -36,15 +36,15 @@ app.post('/api/post/funnyfeed', multipartMiddleware, function(req, res) {
   var tmpPath = image.path;
   var targetPath = username + '_' + time + image.name;
 
-  fs.rename(tmpPath, targetPath, function(err) {
-    if (err) throw err;
+  // fs.rename(tmpPath, targetPath, function(err) {
+  //   if (err) throw err;
 
-    fs.unlink(tmpPath, function() {
-      if (err) throw err;
-    });
-  });
+  //   fs.unlink(tmpPath, function() {
+  //     if (err) throw err;
+  //   });
+  // });
 
-  cloudinary.uploader.upload(targetPath, function(result) {
+  cloudinary.uploader.upload(tmpPath, function(result) {
     console.log(result);
   });
 
