@@ -1,11 +1,12 @@
 var express = require('express');
 var app = express();
-var jsonfile = require('jsonfile');
-var appendjson = require('appendjson');
 var port = process.env.PORT || 3000;
-var fs = require('fs');
 var bodyParser = require('body-parser');
-var file = './snaps.json';
+var mongoose = require('mongoose');
+
+mongoose.connect('mongodb://rajika:miyoungrae123@ds011389.mlab.com:11389/heroku_mk054pc0');
+
+var Post = mongoose.model('Post', { username: String, datetime: String, image: String, like: String});
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -16,57 +17,56 @@ app.get('/', function(req, res) {
   res.json({env: 'testing'});
 });
 
-app.get('/posts', function(req, res) {
-  // jsonfile.readFile(file, function(err, obj) {
-  //   if (err) throw err;
-  //   var names = obj.posts.map(function(item) {
-  //     return item;
-  //   });
-
-  //   res.json(names);
-  // });
-});
-
-app.post('/api/post', function(req, res) {
+//post to funny feed 
+app.post('/api/post/funnyfeed', function(req, res) {
   var username = req.body.username;
   var time = new Date();
   var image = req.body.image;
-  console.log(username);
+
   var post = {
-    name: username,
+    username: username,
     datetime: time,
     image: image,
+    like: '0',
   };
-  var posts = fs.readFileSync('./snaps.json');
-  var config = JSON.parse(posts);
 
-  config.push(post);
+  var newPost = new Post(post);
+  newPost.save(function(err) {
+    if (err) {
+      console.log(err);
+    } else {
+      Post.find(function(err, onePost) {
+        if (err) console.log(err);
 
-  var configJSON = JSON.stringify(config);
+        onePost.map(function(item) {
+          console.log(item._id + ' ' + item.username);
+        });
+      });
 
-  fs.writeFileSync('./snaps.json', configJSON);
-  jsonfile.readFile(file, function(err, obj) {
-    if (err) throw err;
-    var names = obj.map(function(item) {
-      return item;
-    });
-
-    res.json(names);
+      res.json({done: true});
+    }
   });
 });
 
-app.get('/api/post/:id', function(req, res) {
-  var id = req.params.id;
-  var posts = fs.readFileSync('./snaps.json');
-  var config = JSON.parse(posts);
 
-  config.map(function(post) {
-    if (post.name == id) {
-      res.json(post);
-    }
-  });
+//retrieves post based on id (mongodb _id)
+app.get('/api/post/funnyfeed/:id', function(req, res) {
+  var id = req.params.id;
 
   //search query
+
+  Post.find({_id: id}, function(err, userpost) {
+    res.json({ post: userpost[0] });
+  });
+
+});
+
+app.post('/api/feed/funny', function(req, res) {
+
+});
+
+app.get('/api/feed/funny', function(req, res) {
+  res.json();
 });
 
 app.listen(port, function() {
