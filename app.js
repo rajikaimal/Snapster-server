@@ -6,7 +6,7 @@ var mongoose = require('mongoose');
 
 mongoose.connect('mongodb://rajika:miyoungrae123@ds011389.mlab.com:11389/heroku_mk054pc0');
 
-var Post = mongoose.model('Post', { username: String, datetime: String, image: String, like: String});
+var Post = mongoose.model('Post', { username: String, datetime: String, image: String, likes: Number});
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -27,7 +27,7 @@ app.post('/api/post/funnyfeed', function(req, res) {
     username: username,
     datetime: time,
     image: image,
-    like: '0',
+    likes: 0,
   };
 
   var newPost = new Post(post);
