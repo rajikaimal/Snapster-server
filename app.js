@@ -40,7 +40,7 @@ app.post('/api/post/funnyfeed', multipartMiddleware, function(req, res) {
     var post = {
       username: username,
       datetime: time,
-      image: result.public_id,
+      image: 'v/' + result.version + '/' + result.public_id,
       likes: 0,
     };
 
