@@ -6,6 +6,13 @@ var mongoose = require('mongoose');
 var fs = require('fs');
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
+var cloudinary = require('cloudinary');
+
+cloudinary.config({
+  cloud_name: 'rajikaimal',
+  api_key: '815914566295234',
+  api_secret: 'H9x3nzJKnwgxCP7arhR6LNa82s4',
+});
 
 mongoose.connect('mongodb://rajika:miyoungrae123@ds011389.mlab.com:11389/heroku_mk054pc0');
 
@@ -27,7 +34,7 @@ app.post('/api/post/funnyfeed', multipartMiddleware, function(req, res) {
   var image = req.files.image;
 
   var tmpPath = image.path;
-  var targetPath = 'feeds/funny/' + username + '_' + time + image.name;
+  var targetPath = username + '_' + time + image.name;
 
   fs.rename(tmpPath, targetPath, function(err) {
     if (err) throw err;
@@ -37,13 +44,17 @@ app.post('/api/post/funnyfeed', multipartMiddleware, function(req, res) {
     });
   });
 
+  cloudinary.uploader.upload(targetPath, function(result) {
+    console.log(result);
+  });
+
   var post = {
     username: username,
     datetime: time,
     image: targetPath,
     likes: 0,
   };
-  
+
   var newPost = new Post(post);
   newPost.save(function(err) {
     if (err) {
