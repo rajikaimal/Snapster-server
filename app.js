@@ -34,43 +34,34 @@ app.post('/api/post/funnyfeed', multipartMiddleware, function(req, res) {
   var image = req.files.image;
 
   var tmpPath = image.path;
-  var targetPath = username + '_' + time + image.name;
-
-  // fs.rename(tmpPath, targetPath, function(err) {
-  //   if (err) throw err;
-
-  //   fs.unlink(tmpPath, function() {
-  //     if (err) throw err;
-  //   });
-  // });
 
   cloudinary.uploader.upload(tmpPath, function(result) {
     console.log(result);
-  });
+    var post = {
+      username: username,
+      datetime: time,
+      image: result.public_id,
+      likes: 0,
+    };
 
-  var post = {
-    username: username,
-    datetime: time,
-    image: targetPath,
-    likes: 0,
-  };
+    var newPost = new Post(post);
+    newPost.save(function(err) {
+      if (err) {
+        console.log(err);
+      } else {
+        Post.find(function(err, onePost) {
+          if (err) console.log(err);
 
-  var newPost = new Post(post);
-  newPost.save(function(err) {
-    if (err) {
-      console.log(err);
-    } else {
-      Post.find(function(err, onePost) {
-        if (err) console.log(err);
-
-        onePost.map(function(item) {
-          console.log(item._id + ' ' + item.username);
+          onePost.map(function(item) {
+            console.log(item._id + ' ' + item.username);
+          });
         });
-      });
 
-      res.json({done: true});
-    }
+        res.json({done: true});
+      }
+    });
   });
+
 });
 
 //retrieves post based on id (mongodb _id)
