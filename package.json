@@ -1,7 +1,7 @@
 {
   "name": "snapster",
   "version": "0.0.1",
-  "description": "REST api for snapster mobile application",
+  "description": "REST API for snapster mobile application",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
