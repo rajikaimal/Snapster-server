@@ -7,11 +7,12 @@ var fs = require('fs');
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 var cloudinary = require('cloudinary');
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
-var cloudinaryConfig = require('./config/cloudinary');
 
-cloudinary.config(cloudinaryConfig);
+cloudinary.config({
+  cloud_name: 'rajikaimal',
+  api_key: '815914566295234',
+  api_secret: 'H9x3nzJKnwgxCP7arhR6LNa82s4',
+});
 
 mongoose.connect('mongodb://rajika:miyoungrae123@ds011389.mlab.com:11389/heroku_mk054pc0');
 
@@ -23,8 +24,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.get('/', function(req, res) {
-  //  res.json({env: 'testing'});
-  console.log('connected');
+  res.json({env: 'testing'});
 });
 
 //post to funny feed
@@ -62,17 +62,7 @@ app.post('/api/post/funnyfeed', multipartMiddleware, function(req, res) {
     });
   });
 
-  io.on('connection', function(socket) {
-    console.log('connected');
-    socket.on('funnyfeedpost', function(post) {
-      socket.broadcast.emit('newfunnypost',
-        { message: 'socket io data' }
-      ); 
-    });
-  });
 });
-
-
 
 //retrieves post based on id (mongodb _id)
 app.get('/api/post/funnyfeed/:id', function(req, res) {
