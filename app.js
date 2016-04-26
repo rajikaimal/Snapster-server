@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 var fs = require('fs');
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
+var mongoConfig = require('./config/mongo');
 var cloudinary = require('cloudinary');
 var cloudinaryConfig = require('./config/cloudinary');
 var server = require('http').Server(app);
@@ -21,7 +22,7 @@ cloudinary.config({
   api_secret: 'H9x3nzJKnwgxCP7arhR6LNa82s4',
 });
 
-mongoose.connect('mongodb://rajikaimal:sicasica123@ds021681.mlab.com:21681/snapster');
+mongoose.connect(mongoConfig.user);
 
 var Post = mongoose.model('Post', { username: String, datetime: String, image: String, likes: Number});
 var Comment = mongoose.model('Comment', { postid: String, username: String, datetime: String, comment: String});
