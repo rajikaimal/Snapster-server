@@ -13,6 +13,7 @@ var io = require('socket.io')(server);
 var router = express.Router();
 var commentRoutes = require('./routes/comments');
 var postRoutes = require('./routes/posts');
+var likeRoutes = require('./routes/likes');
 
 app.use(router);
 app.use(bodyParser.json());
@@ -28,11 +29,78 @@ cloudinary.config({
 
 mongoose.connect(mongoConfig.user);
 
-var Post = mongoose.model('Post', { username: String, datetime: String, image: String, likes: Number });
+var Post = mongoose.model('Post', { username: String, datetime: String, image: String });
 var Comment = mongoose.model('Comment', { postid: String, username: String, datetime: String, comment: String });
+var Like = mongoose.model('Like', { postid: String, username: String, datetime: String });
 
 commentRoutes(router, Comment);
 postRoutes(router, multipartMiddleware, cloudinary, io, Post);
+likeRoutes(router, multipartMiddleware, io, Like);
+
+var connectedUser = {};
+
+io.on('connection', function (socket) {
+  socket.on('connecteduser', function (data) {
+    console.log(data in connectedUser);
+    if ((data != null)) {
+      //(!(data in connectedUser)) &&
+      socket.username = data;
+      connectedUser[socket.username] = socket.id;
+      console.log(connectedUser);
+    }
+  });
+
+  socket.on('like', function (data) {
+    var postId = data.postid;
+    var username = data.username;
+    var time = new Date();
+
+    var like = {
+      postid: postId,
+      username: username,
+      datetime: time,
+    };
+
+    var newLike = new Like(like);
+
+    newLike.save(function (err, docs) {
+      if (err) console.log(err);
+
+      console.log(docs);
+      Like.find({ postid: like.postId }, function (err, docs) {
+        if (err)
+
+        console.log(docs);
+        socket.broadcast.to(connectedUser[data.gotLikedUsername]).emit('notifylike', { content: docs });
+      });
+    });
+  });
+
+  socket.on('comment', function(data) {
+    var postid = data.postid;
+    var username = data.username;
+    var time = new Date();
+    var comment = req.body.comment;
+
+    var comment = {
+        postid: postid,
+        username: username,
+        datetime: time,
+        comment: comment,
+      };
+
+    console.log(comment);
+
+    var newComment = new Comment(comment);
+    newComment.save(function (err) {
+      if (err) {
+        console.log(err);
+      } else {
+        io.emit('newfunnycomment', comment);
+      }
+    });
+  });
+});
 
 app.get('/', function (req, res) {
   res.json({ env: 'testing' });
