@@ -27,6 +27,7 @@ var postRouter = function (router, multipartMiddleware, cloudinary, io, Post) {
     var description = req.body.description;
     var time = new Date();
     var image = req.files.image;
+    var type = 'funny';
 
     var tmpPath = image.path;
 
@@ -37,7 +38,7 @@ var postRouter = function (router, multipartMiddleware, cloudinary, io, Post) {
         description: description,
         datetime: time,
         image: 'v' + result.version + '/' + result.public_id,
-        likes: 0,
+        type: type,
       };
 
       var newPost = new Post(post);
