@@ -24,6 +24,7 @@ var postRouter = function (router, multipartMiddleware, cloudinary, io, Post) {
   .post('/api/post/funnyfeed', multipartMiddleware, function (req, res) {
 
     var username = req.body.username;
+    var description = req.body.description;
     var time = new Date();
     var image = req.files.image;
 
@@ -33,6 +34,7 @@ var postRouter = function (router, multipartMiddleware, cloudinary, io, Post) {
       console.log(result);
       var post = {
         username: username,
+        description: description,
         datetime: time,
         image: 'v' + result.version + '/' + result.public_id,
         likes: 0,

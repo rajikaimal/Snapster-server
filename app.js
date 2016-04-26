@@ -29,7 +29,7 @@ cloudinary.config({
 
 mongoose.connect(mongoConfig.user);
 
-var Post = mongoose.model('Post', { username: String, datetime: String, image: String });
+var Post = mongoose.model('Post', { username: String, description: String, datetime: String, image: String });
 var Comment = mongoose.model('Comment', { postid: String, username: String, datetime: String, comment: String });
 var Like = mongoose.model('Like', { postid: String, username: String, datetime: String });
 
@@ -76,7 +76,7 @@ io.on('connection', function (socket) {
     });
   });
 
-  socket.on('comment', function(data) {
+  socket.on('comment', function (data) {
     var postid = data.postid;
     var username = data.username;
     var time = new Date();
