@@ -7,8 +7,13 @@ var fs = require('fs');
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 var cloudinary = require('cloudinary');
+var cloudinaryConfig = require('./config/cloudinary');
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+var router = express.Router();
+var commentRoutes = require('./routes/comments');
+
+app.use(router);
 
 cloudinary.config({
   cloud_name: 'rajikaimal',
@@ -16,9 +21,13 @@ cloudinary.config({
   api_secret: 'H9x3nzJKnwgxCP7arhR6LNa82s4',
 });
 
-mongoose.connect('mongodb://rajika:miyoungrae123@ds011389.mlab.com:11389/heroku_mk054pc0');
+mongoose.connect('mongodb://rajikaimal:sicasica123@ds021681.mlab.com:21681/snapster');
 
 var Post = mongoose.model('Post', { username: String, datetime: String, image: String, likes: Number});
+var Comment = mongoose.model('Comment', { postid: String, username: String, datetime: String, comment: String});
+
+commentRoutes(router, Comment);
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -83,8 +92,40 @@ app.get('/api/post/funnyfeed/:id', function(req, res) {
 
 });
 
+app.post('/api/post/funnyfeed/comment', function(req, res) {
+  var postid = req.body.postid;
+  var username = req.body.username;
+  var time = new Date();
+  var comment = req.body.comment;
+
+  var comment = {
+      postid: postid,
+      username: username,
+      datetime: time,
+      comment: comment
+  };
+
+  console.log(comment);
+
+  var newComment = new Comment(comment);
+  newComment.save(function(err) {
+    if (err) {
+      console.log(err);
+    } else {
+      Comment.find(function(err, onePost) {
+        if (err) console.log(err);
+
+        onePost.map(function(item) {
+          console.log(item._id + ' ' + item.username);
+        });
+      });
+      res.json({done: true});
+    }
+  });
+});
+
+
 app.get('/api/feed/funny', function(req, res) {
-  console.log('Funny feed');
   Post.find(function(err, posts) {
     if (err) console.log(err);
 
