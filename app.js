@@ -28,16 +28,16 @@ cloudinary.config({
 
 mongoose.connect(mongoConfig.user);
 
-var Post = mongoose.model('Post', { username: String, datetime: String, image: String, likes: Number});
-var Comment = mongoose.model('Comment', { postid: String, username: String, datetime: String, comment: String});
+var Post = mongoose.model('Post', { username: String, datetime: String, image: String, likes: Number });
+var Comment = mongoose.model('Comment', { postid: String, username: String, datetime: String, comment: String });
 
 commentRoutes(router, Comment);
-postRoutes(router,multipartMiddleware,cloudinary,io,Post);
+postRoutes(router, multipartMiddleware, cloudinary, io, Post);
 
-app.get('/', function(req, res) {
-  res.json({env: 'testing'});
+app.get('/', function (req, res) {
+  res.json({ env: 'testing' });
 });
 
-server.listen(port, function() {
+server.listen(port, function () {
   console.log('Server running on port %s', port);
 });
