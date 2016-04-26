@@ -2,7 +2,7 @@ var express = require('express');
 
 var postRouter = function (router, multipartMiddleware, cloudinary, io, Post) {
   router.get('/api/feed/funny', function (req, res) {
-    Post.find(function (err, posts) {
+    Post.find({'type': 'funny'}, function (err, posts) {
       if (err) console.log(err);
 
       res.json(posts);

@@ -31,7 +31,7 @@ cloudinary.config({
 
 mongoose.connect(mongoConfig.user);
 
-var Post = mongoose.model('Post', { username: String, description: String, datetime: String, image: String });
+var Post = mongoose.model('Post', { username: String, description: String, datetime: String, image: String, type: String });
 var Comment = mongoose.model('Comment', { postid: String, username: String, datetime: String, comment: String });
 var Like = mongoose.model('Like', { postid: String, username: String, datetime: String });
 var Challenge = mongoose.model('Challenge', { challengeid: String, challenger: String, challengee: String, datetime: String, done: Boolean });
