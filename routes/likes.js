@@ -18,8 +18,8 @@ var likesRouter = function (router, multipartMiddleware, io, Like, Post) {
 
     var newLike = new Like(like);
 
-    Post.findOneAndUpdate({ '_id': like.postid }, { $inc: { likes: 1 }}, function(err, done) {
-      if(err) console.log(err);
+    Post.findOneAndUpdate({ _id: like.postid }, { $inc: { likes: 1 } }, function (err, done) {
+      if (err) console.log(err);
     });
 
     newLike.save(function (err, docs) {
@@ -33,10 +33,27 @@ var likesRouter = function (router, multipartMiddleware, io, Like, Post) {
 
   })
 
+  .post('/api/post/unlike', function (req, res) {
+    var postId = req.body.postid;
+    var username = req.body.username;
+
+    Post.findOneAndUpdate({ _id: postId }, { $inc: { likes: -1 } }, function (err, done) {
+      if (err) console.log(err);
+    });
+
+    Like.remove({ postid: postid, username: username }, function (err, docs) {
+      if (err) console.log(err);
+
+      res.json({
+        status: 'done',
+      });
+    });
+  })
+
   .get('/api/post/likes', function (req, res) {
     var postId = req.query.postid;
     console.log(postId);
-    Like.find({'postid': postId}, function (err, docs) {
+    Like.find({ postid: postId }, function (err, docs) {
       if (err)
 
       console.log(docs);
