@@ -9,7 +9,7 @@ var postRouter = function (router, multipartMiddleware, cloudinary, io, Post, Li
     Post.find({ type: 'funny' }, function (err, posts) {
       if (err) console.log(err);
 
-      postsList = [];
+      calls = [];
 
       posts.forEach(function(post) {
         calls.push(function(callback) {
