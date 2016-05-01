@@ -33,7 +33,7 @@ var likesRouter = function (router, multipartMiddleware, io, Like, Post) {
 
   })
 
-  .post('/api/post/unlike', function (req, res) {
+  .post('/api/post/unlike', multipartMiddleware, function (req, res) {
     var postId = req.body.postid;
     var username = req.body.username;
 
@@ -41,7 +41,7 @@ var likesRouter = function (router, multipartMiddleware, io, Like, Post) {
       if (err) console.log(err);
     });
 
-    Like.remove({ postid: postid, username: username }, function (err, docs) {
+    Like.remove({ postid: postId, username: username }, function (err, docs) {
       if (err) console.log(err);
 
       res.json({
