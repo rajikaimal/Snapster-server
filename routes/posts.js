@@ -1,34 +1,43 @@
 var express = require('express');
 
-var postRouter = function (router, multipartMiddleware, cloudinary, io, Post, Like) {
+var calls = [];
+
+var postRouter = function (router, multipartMiddleware, cloudinary, io, Post, Like, async) {
   router.get('/api/feed/funny', function (req, res) {
     var username = req.query.username;
     console.log('requesting ' + username);
     Post.find({ type: 'funny' }, function (err, posts) {
       if (err) console.log(err);
 
+      postsList = [];
 
       posts.forEach(function(post) {
-        Like.find({ postid: post._id, username: username }, function (err, userLike) {
-          if (err) {
-            console.log(err);
-          } else {
-            if(userLike != null) {
-              
+        calls.push(function(callback) {
+          Like.find({ postid: post._id, username: username }, function (err, userLike) {
+            if (err) {
+              console.log(err);
+            } else {
+              if(userLike != '') {
+                post.set('likestate', true, { strict: false });
+                //res.json(post);
+                
+              }
+              else {
+                post.set('likestate', false, { strict: false });
+                
+              }
+              callback(null, post);
             }
-          }
+          });   
         });
       });
-      // posts.forEach(function(post) {
-      //   Like.where({ 'postid': post._id }).count(function(err,count) {
+      async.parallel(calls, function(err, result) {
+        if (err)
+            return console.log(err);
+        
+        res.json(result);
+      });
 
-      //     posts.forEach(function(onePost) {
-      //       onePost.concat({ 'likes': count });
-      //       console.log(onePost);
-      //     });
-      //   });
-      // });
-      res.json(posts);
     });
   })
 
