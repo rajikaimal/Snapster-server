@@ -1,6 +1,6 @@
 var express = require('express');
 
-var likesRouter = function (router, multipartMiddleware, io, Like) {
+var likesRouter = function (router, multipartMiddleware, io, Like, Post) {
   router.post('/api/post/like', multipartMiddleware, function (req, res) {
 
     console.log(req);
@@ -17,6 +17,10 @@ var likesRouter = function (router, multipartMiddleware, io, Like) {
     console.log(like);
 
     var newLike = new Like(like);
+
+    Post.findOneAndUpdate({ '_id': like.postid }, { $inc: { likes: 1 }}, function(err, done) {
+      if(err) console.log(err);
+    });
 
     newLike.save(function (err, docs) {
       if (err) console.log(err);
