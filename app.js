@@ -37,7 +37,7 @@ var Like = mongoose.model('Like', { postid: String, username: String, datetime: 
 var Challenge = mongoose.model('Challenge', { challengeid: String, challenger: String, challengee: String, datetime: String, done: Boolean });
 
 commentRoutes(router, Comment);
-postRoutes(router, multipartMiddleware, cloudinary, io, Post);
+postRoutes(router, multipartMiddleware, cloudinary, io, Post, Like);
 likeRoutes(router, multipartMiddleware, io, Like, Post);
 challengeRoutes(router, multipartMiddleware, io, Challenge, Post);
 
