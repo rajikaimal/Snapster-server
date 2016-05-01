@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
+var async = require('async');
 var mongoConfig = require('./config/mongo');
 var cloudinary = require('cloudinary');
 var cloudinaryConfig = require('./config/cloudinary');
@@ -37,7 +38,7 @@ var Like = mongoose.model('Like', { postid: String, username: String, datetime: 
 var Challenge = mongoose.model('Challenge', { challengeid: String, challenger: String, challengee: String, datetime: String, done: Boolean });
 
 commentRoutes(router, Comment);
-postRoutes(router, multipartMiddleware, cloudinary, io, Post, Like);
+postRoutes(router, multipartMiddleware, cloudinary, io, Post, Like, async);
 likeRoutes(router, multipartMiddleware, io, Like, Post);
 challengeRoutes(router, multipartMiddleware, io, Challenge, Post);
 
