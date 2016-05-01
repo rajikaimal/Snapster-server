@@ -2,17 +2,22 @@ var express = require('express');
 
 var postRouter = function (router, multipartMiddleware, cloudinary, io, Post, Like) {
   router.get('/api/feed/funny', function (req, res) {
-    var username = req.params.username;
+    var username = req.query.username;
     console.log('requesting ' + username);
     Post.find({ type: 'funny' }, function (err, posts) {
       if (err) console.log(err);
 
-      Like.find({ postid: posts._id, username: username }, function (err, userLike) {
-        if (err) {
-          console.log(err);
-        } else {
 
-        }
+      posts.forEach(function(post) {
+        Like.find({ postid: post._id, username: username }, function (err, userLike) {
+          if (err) {
+            console.log(err);
+          } else {
+            if(userLike != null) {
+              post.
+            }
+          }
+        });
       });
       // posts.forEach(function(post) {
       //   Like.where({ 'postid': post._id }).count(function(err,count) {
