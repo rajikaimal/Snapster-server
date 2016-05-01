@@ -4,7 +4,15 @@ var postRouter = function (router, multipartMiddleware, cloudinary, io, Post) {
   router.get('/api/feed/funny', function (req, res) {
     Post.find({'type': 'funny'}, function (err, posts) {
       if (err) console.log(err);
-
+      // posts.forEach(function(post) {
+      //   Like.where({ 'postid': post._id }).count(function(err,count) {
+          
+      //     posts.forEach(function(onePost) {
+      //       onePost.concat({ 'likes': count });
+      //       console.log(onePost);
+      //     });
+      //   });
+      // });
       res.json(posts);
     });
   })

@@ -31,14 +31,14 @@ cloudinary.config({
 
 mongoose.connect(mongoConfig.user);
 
-var Post = mongoose.model('Post', { username: String, description: String, datetime: String, image: String, type: String });
+var Post = mongoose.model('Post', { username: String, description: String, datetime: String, image: String, likes: Number, type: String });
 var Comment = mongoose.model('Comment', { postid: String, username: String, datetime: String, comment: String });
 var Like = mongoose.model('Like', { postid: String, username: String, datetime: String });
 var Challenge = mongoose.model('Challenge', { challengeid: String, challenger: String, challengee: String, datetime: String, done: Boolean });
 
 commentRoutes(router, Comment);
 postRoutes(router, multipartMiddleware, cloudinary, io, Post);
-likeRoutes(router, multipartMiddleware, io, Like);
+likeRoutes(router, multipartMiddleware, io, Like, Post);
 challengeRoutes(router, multipartMiddleware, io, Challenge, Post);
 
 var connectedUser = {};
