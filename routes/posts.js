@@ -14,7 +14,7 @@ var postRouter = function (router, multipartMiddleware, cloudinary, io, Post, Li
             console.log(err);
           } else {
             if(userLike != null) {
-              post.
+              
             }
           }
         });
