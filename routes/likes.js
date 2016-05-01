@@ -3,7 +3,7 @@ var express = require('express');
 var likesRouter = function (router, multipartMiddleware, io, Like) {
   router.post('/api/post/like', multipartMiddleware, function (req, res) {
 
-    console.log(req.body);
+    console.log(req.params);
 
     var postId = req.body.postid;
     var username = req.body.username;
