@@ -2,6 +2,8 @@ var express = require('express');
 
 var postRouter = function (router, multipartMiddleware, cloudinary, io, Post) {
   router.get('/api/feed/funny', function (req, res) {
+    var username = req.body.username;
+    console.log('requesting ' + username);
     Post.find({'type': 'funny'}, function (err, posts) {
       if (err) console.log(err);
       // posts.forEach(function(post) {
