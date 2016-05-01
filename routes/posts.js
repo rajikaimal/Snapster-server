@@ -1,6 +1,6 @@
 var express = require('express');
 
-var postRouter = function (router, multipartMiddleware, cloudinary, io, Post, Lke) {
+var postRouter = function (router, multipartMiddleware, cloudinary, io, Post, Like) {
   router.get('/api/feed/funny', function (req, res) {
     var username = req.params.username;
     console.log('requesting ' + username);
