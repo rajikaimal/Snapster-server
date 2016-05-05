@@ -41,7 +41,7 @@ var usersRouter = function (router, User, multipartMiddleware) {
       if (err) console.log(err);
 
       if (docs) {
-        res.json({ status: 'authorized' });
+        res.json(docs);
       } else {
         res.json({ status: 'unauthorized' });
       }
