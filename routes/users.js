@@ -1,6 +1,6 @@
 var express = require('express');
 
-var likesRouter = function (router, User, multipartMiddleware) {
+var usersRouter = function (router, User, multipartMiddleware) {
   router.post('/api/user/register', multipartMiddleware, function (req, res) {
     var firstname = req.body.firstname;
     var lastname = req.body.lastname;
@@ -17,7 +17,6 @@ var likesRouter = function (router, User, multipartMiddleware) {
       password: password,
       datetime: time,
     };
-    console.log(like);
 
     var newUser = new User(user);
 
@@ -36,19 +35,17 @@ var likesRouter = function (router, User, multipartMiddleware) {
     var username = req.query.username;
     var email = req.query.email;
 
-
     User.find({ postid: postId }, function (err, docs) {
       if (err)
 
-      if(docs != null) {
-        res.json({ 'status': 'authorized' });
-      }
-      else {
-        res.json({ 'status': 'unauthorized' });
+      if (docs != null) {
+        res.json({ status: 'authorized' });
+      } else {
+        res.json({ status: 'unauthorized' });
       }
     });
   });
 
 };
 
-module.exports = likesRouter;
+module.exports = usersRouter;
