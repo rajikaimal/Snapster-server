@@ -21,6 +21,7 @@ var challengeRouter = function (router, multipartMiddleware, io, Challenge, Post
           challengeeUrl: challengee.image,
           challengerUrl: 'v' + result.version + '/' + result.public_id,
           datetime: time,
+          likes: 0,
           done: false,
         };
 
