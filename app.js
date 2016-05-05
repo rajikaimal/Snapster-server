@@ -13,6 +13,7 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var router = express.Router();
 
+var userRoutes = require('./routes/users');
 var commentRoutes = require('./routes/comments');
 var postRoutes = require('./routes/posts');
 var likeRoutes = require('./routes/likes');
@@ -32,6 +33,7 @@ cloudinary.config({
 
 mongoose.connect(mongoConfig.user);
 
+var User = mongoose.model('User', { firstname: String, lastname: String, username: String, email: String, password: String, datetime: String });
 var Post = mongoose.model('Post', { username: String, description: String, datetime: String, image: String, likes: Number, type: String });
 var Comment = mongoose.model('Comment', { postid: String, username: String, datetime: String, comment: String });
 var Like = mongoose.model('Like', { postid: String, username: String, datetime: String });
@@ -39,6 +41,7 @@ var Challenge = mongoose.model('Challenge', { postid: String, challenger: String
   createdAt: { type: Date, expires: 10 },
 });
 
+userRoutes(router, User, multipartMiddleware);
 commentRoutes(router, Comment);
 postRoutes(router, multipartMiddleware, cloudinary, io, Post, Like, async);
 likeRoutes(router, multipartMiddleware, io, Like, Post);
