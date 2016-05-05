@@ -35,7 +35,7 @@ mongoose.connect(mongoConfig.user);
 var Post = mongoose.model('Post', { username: String, description: String, datetime: String, image: String, likes: Number, type: String });
 var Comment = mongoose.model('Comment', { postid: String, username: String, datetime: String, comment: String });
 var Like = mongoose.model('Like', { postid: String, username: String, datetime: String });
-var Challenge = mongoose.model('Challenge', { postid: String, challenger: String, challengee: String, challengeeUrl: String, challengerUrl: String, datetime: String, done: Boolean,
+var Challenge = mongoose.model('Challenge', { postid: String, challenger: String, challengee: String, challengeeUrl: String, challengerUrl: String, likes: Number, datetime: String, done: Boolean,
   createdAt: { type: Date, expires: 10 },
 });
 

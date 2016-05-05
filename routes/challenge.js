@@ -15,14 +15,14 @@ var challengeRouter = function (router, multipartMiddleware, io, Challenge, Post
       cloudinary.uploader.upload(tmpPath, function (result) {
         console.log(result);
         var challenge = {
-	        postid: postId,
-	        challenger: username,
-	        challengee: challengee.username,
-	        challengeeUrl: challengee.image,
-	        challengerUrl: 'v' + result.version + '/' + result.public_id,
-	        datetime: time,
-	        done: false,
-	    };
+          postid: postId,
+          challenger: username,
+          challengee: challengee.username,
+          challengeeUrl: challengee.image,
+          challengerUrl: 'v' + result.version + '/' + result.public_id,
+          datetime: time,
+          done: false,
+        };
 
         var newChallenge = new Challenge(challenge);
         newChallenge.save(function (err, docs) {
@@ -62,7 +62,35 @@ var challengeRouter = function (router, multipartMiddleware, io, Challenge, Post
     Challenge.find({ challengee: username, done: false }, function (err, challenges) {
       if (err) console.log(err);
 
-      res.json(challenges);
+      calls = [];
+
+      challenges.forEach(function(post) {
+        calls.push(function(callback) {
+          Like.find({ postid: post._id, username: username }, function (err, userLike) {
+            if (err) {
+              console.log(err);
+            } else {
+              if(userLike != '') {
+                post.set('likestate', true, { strict: false });
+                //res.json(post);
+                
+              }
+              else {
+                post.set('likestate', false, { strict: false });
+                
+              }
+              callback(null, post);
+            }
+          });   
+        });
+      });
+      async.parallel(calls, function(err, result) {
+        if (err)
+            return console.log(err);
+        
+        res.json(result);
+      });
+
     });
 
   })
