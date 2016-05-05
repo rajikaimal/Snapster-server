@@ -45,6 +45,17 @@ var challengeRouter = function (router, multipartMiddleware, io, Challenge, Post
     });
   })
 
+  .get('/api/challenge/post', function (req, res) {
+    var postId = req.query.postid;
+
+    Challenge.find({ postid: postId, done: false }, function (err, challenges) {
+      if (err) console.log(err);
+
+      res.json(challenges);
+    });
+
+  })
+
   .get('/api/challenge/my', function (req, res) {
     var username = req.query.username;
 
