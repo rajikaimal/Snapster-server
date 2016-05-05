@@ -35,10 +35,12 @@ var usersRouter = function (router, User, multipartMiddleware) {
     var username = req.query.username;
     var password = req.query.password;
 
-    User.find({ username: username, password: password }, function (err, docs) {
-      if (err)
+    console.log(username);
 
-      if (docs != null) {
+    User.find({ username: username, password: password }, function (err, docs) {
+      if (err) console.log(err);
+
+      if (docs) {
         res.json({ status: 'authorized' });
       } else {
         res.json({ status: 'unauthorized' });
