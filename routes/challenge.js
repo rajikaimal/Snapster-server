@@ -1,27 +1,34 @@
 var express = require('express');
 
-var challengeRouter = function (router, multipartMiddleware, Challenge, Post) {
-  router.post('/api/challenge/create', function (req, res) {
-    console.log(postId);
+var challengeRouter = function (router, multipartMiddleware, io, Challenge, Post, cloudinary) {
+  router.post('/api/challenge/create', multipartMiddleware, function (req, res) {
+    console.log(req.body);
 
     var postId = req.body.postid;
     var username = req.body.username;
     var time = new Date();
     var image = req.files.image;
 
-    Post.findOne({ postid: postId }, 'username', function (err, challengee) {
-      console.log(challengee);
-      var challenge = {
-        challengeid: postId,
-        challenger: username,
-        challengee: challengee,
-        datetime: time,
-        done: false,
-      };
-      var newChallenge = new Challenge(challenge);
-      newChallenge.save(function (err, docs) {
-        if (err) console.log(err);
+    var tmpPath = image.path;
 
+    Post.findOne({ _id: postId }, 'username, image', function (err, challengee) {
+      cloudinary.uploader.upload(tmpPath, function (result) {
+        console.log(result);
+        var challenge = {
+	        postid: postId,
+	        challenger: username,
+	        challengee: challengee.username,
+	        challengeeUrl: challengee.image,
+	        challengerUrl: 'v' + result.version + '/' + result.public_id,
+	        datetime: time,
+	        done: false,
+	    };
+
+        var newChallenge = new Challenge(challenge);
+        newChallenge.save(function (err, docs) {
+          if (err) console.log(err);
+          res.json({ status: 'done' });
+        });
       });
     });
   })
